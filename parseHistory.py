@@ -1,12 +1,12 @@
 # coding: UTF-8
 
 import sys # モジュール属性 argv を取得するため
-from natto import MeCab
-
+import MeCab
+import re
 import pprint
 
 # めかぶと辞書配列の定義
-mecab = MeCab()
+mecab = MeCab.Tagger('mecabrc')
 aryNoun = []
 aryFixNoun = []
 
@@ -29,27 +29,33 @@ def getwords(content):
     #     node = node.next
     print(content)
     i=0
-    for n in mecab.parse(content, as_nodes=True):
-
-        # if i == 10:
-        #     break
-
-        node = n.feature.split(',');
-        # print("-----------------------------")
-        # print(node[0])
-        # print(node[1])
-        # print(node[2])
-        # print(node[3])
-        # print("-----------------------------")
-        print(node)
-
-        if node[0] == '名詞' and node[1] == '一般':
-            aryNoun.append(node[6])
-        elif node[0] == '名詞' and node[1] == '固有名詞':
-            # if True:
-            aryFixNoun.append(node[6])
-
-        # i+=1
+    analyzetext = mecab.parse(content)
+    aryNode = re.split("[\t,]",analyzetext)
+    print(aryNode)
+    # node = mecab.parseToNode(content)
+    # while node:
+    #
+    #     if i == 10:
+    #         break
+    #
+    #     # node = n.feature.split(',');
+    #     # dump(node)
+    #     print(node.feature)
+    #     # print("-----------------------------")
+    #     # print(node[0])
+    #     # print(node[1])
+    #     # print(node[2])
+    #     # print(node[3])
+    #     # print("-----------------------------")
+    #     # print(node)
+    #     #
+    #     # if node[0] == '名詞' and node[1] == '一般':
+    #     #     aryNoun.append(node[6])
+    #     # elif node[0] == '名詞' and node[1] == '固有名詞':
+    #     #     # if True:
+    #     #     aryFixNoun.append(node[6])
+    #
+    #     i+=1
 
 
 # １行ずつ読み込んでパースしていく
